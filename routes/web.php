@@ -14,5 +14,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return ['ahmad' => 'mohammed'];
+    return view('posts');
+});
+
+Route::get('/post',function(){
+    return view('post');
+});
+
+// imagine u are taking posts as id from db but here you are taking from html files into posts folder
+
+Route::get('posts/{post}',function($slug){
+    $path = __DIR__ . "/../resources/posts/{$slug}.html";
+    if(!file_exists($path)){
+        dd( ' file does not exist'); // to die the excution of operation 
+        //abort(404); to make an 404 error here
+        //return redirect('/'); to redirect the user to home page
+    }
+
+    $post = file_get_contents($path);
+
+    return view('post',[
+        'post' => $post
+    ]);
 });
