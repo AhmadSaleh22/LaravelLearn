@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Post;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,16 +25,27 @@ Route::get('/post',function(){
 // imagine u are taking posts as id from db but here you are taking from html files into posts folder
 
 Route::get('posts/{post}',function($slug){
+    //find a post by it's slug and pass it to a view called "post"
+
+    return view('post',
+    [
+        'post' => Post::find($slug)
+    ]);
+    /*
     $path = __DIR__ . "/../resources/posts/{$slug}.html";
     if(!file_exists($path)){
-        dd( ' file does not exist'); // to die the excution of operation 
+        //dd( ' file does not exist'); // to die the excution of operation 
         //abort(404); to make an 404 error here
-        //return redirect('/'); to redirect the user to home page
+        return redirect('/'); //to redirect the user to home page
     }
 
-    $post = file_get_contents($path);
+    //this code for caching times of rendering and get request and make limit for them
+    $post = cache()->remember('posts.$slug', 5, function () use($path) {
+        var_dump('ahmadsaleh');
+        return file_get_contents($path);
+    });
 
     return view('post',[
         'post' => $post
-    ]);
+    ]);*/
 });
